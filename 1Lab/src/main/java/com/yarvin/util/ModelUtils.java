@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 
 public class ModelUtils {
 
-    // Метод для изменения размера изображения
     public static BufferedImage resizeImage(BufferedImage originalImage, int newWidth, int newHeight) {
         BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resizedImage.createGraphics();
@@ -19,7 +18,6 @@ public class ModelUtils {
         return resizedImage;
     }
 
-    // Метод для преобразования изображения в массив данных
     public static double[] imageToArray(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -28,14 +26,13 @@ public class ModelUtils {
             for (int x = 0; x < width; x++) {
                 int rgb = image.getRGB(x, y);
                 int gray = (int) (0.299 * ((rgb >> 16) & 0xFF) + 0.587 * ((rgb >> 8) & 0xFF) + 0.114 * (rgb & 0xFF));
-                // Инвертируем и нормализуем
+
                 data[y * width + x] = (255 - gray) / 255.0;
             }
         }
         return data;
     }
 
-    // Метод для изменения размера DataSet
     public static DataSet resizeDataSet(DataSet dataSet, int newWidth, int newHeight) {
         INDArray features = dataSet.getFeatures();
         INDArray labels = dataSet.getLabels();

@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleNeuralNetwork {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleNeuralNetwork.class);
+    //private static final Logger logger = LoggerFactory.getLogger(SimpleNeuralNetwork.class);
+
     public static void main(String[] args) throws Exception {
         int batchSize = 64;
         int numClasses = 10;
@@ -52,8 +53,13 @@ public class SimpleNeuralNetwork {
                         .activation(Activation.RELU)
                         .dropOut(0.5)
                         .build())
-                .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                .layer(1, new DenseLayer.Builder()
                         .nIn(512)
+                        .nOut(256)
+                        .activation(Activation.RELU)
+                        .build())
+                .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                        .nIn(256)
                         .nOut(numClasses)
                         .activation(Activation.SOFTMAX)
                         .build())
@@ -66,19 +72,19 @@ public class SimpleNeuralNetwork {
 
         // Обучение модели
         for (int i = 0; i < numEpochs; i++) {
-            logger.info("Эпоха " + (i + 1) + " из " + numEpochs);
+            System.out.println("Эпоха " + (i + 1) + " из " + numEpochs);
             model.fit(trainData);
         }
 
         // Сохранение модели в файл
         File modelFile = new File("model_8x8.zip");
         ModelSerializer.writeModel(model, modelFile, true);
-        logger.info("Модель сохранена в файл: " + modelFile.getAbsolutePath());
+        System.out.println("Модель сохранена в файл: " + modelFile.getAbsolutePath());
 
         // Оценка модели на тестовых данных
-        logger.info("Оценка модели на тестовых данных...");
+        System.out.println("Оценка модели на тестовых данных...");
         var eval = model.evaluate(testData);
-        logger.info(eval.stats());
+        System.out.println(eval.stats());
     }
 
     private static List<org.nd4j.linalg.dataset.DataSet> resizeData(DataSetIterator iterator, int newWidth, int newHeight) {
