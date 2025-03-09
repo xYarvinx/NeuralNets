@@ -29,7 +29,7 @@ public class DigitRecognizer extends JFrame {
         setLocationRelativeTo(null);
 
         try {
-            model = ModelSerializer.restoreMultiLayerNetwork(new File("model_28x28.zip"));
+            model = ModelSerializer.restoreMultiLayerNetwork(new File("model_28x28_2.zip"));
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ошибка загрузки модели!", "Ошибка", JOptionPane.ERROR_MESSAGE);

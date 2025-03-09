@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleNeuralNetwork {
-    //private static final Logger logger = LoggerFactory.getLogger(SimpleNeuralNetwork.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleNeuralNetwork.class);
 
     public static void main(String[] args) throws Exception {
         int batchSize = 64;
         int numClasses = 10;
-        int numEpochs = 500;
+        int numEpochs = 100;
 
         DataSetIterator trainData = new MnistDataSetIterator(batchSize, true, 12345);
         DataSetIterator testData = new MnistDataSetIterator(batchSize, false, 12345);
@@ -41,17 +41,17 @@ public class SimpleNeuralNetwork {
                 .list()
                 .layer(0, new DenseLayer.Builder()
                         .nIn(784)
-                        .nOut(512)
+                        .nOut(1024)
                         .activation(Activation.RELU)
                         .dropOut(0.5)
                         .build())
                 .layer(1, new DenseLayer.Builder()
-                        .nIn(512)
-                        .nOut(256)
+                        .nIn(1024)
+                        .nOut(512)
                         .activation(Activation.RELU)
                         .build())
                 .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
-                        .nIn(256)
+                        .nIn(512)
                         .nOut(numClasses)
                         .activation(Activation.SOFTMAX)
                         .build())
@@ -66,7 +66,7 @@ public class SimpleNeuralNetwork {
             model.fit(trainData);
         }
 
-        File modelFile = new File("model_28x28.zip");
+        File modelFile = new File("model_28x28_2.zip");
         ModelSerializer.writeModel(model, modelFile, true);
         System.out.println("Модель сохранена в файл: " + modelFile.getAbsolutePath());
 
