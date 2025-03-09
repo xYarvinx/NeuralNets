@@ -33,31 +33,4 @@ public class ModelUtils {
         return data;
     }
 
-    public static DataSet resizeDataSet(DataSet dataSet, int newWidth, int newHeight) {
-        INDArray features = dataSet.getFeatures();
-        INDArray labels = dataSet.getLabels();
-        INDArray resizedFeatures = Nd4j.create(features.size(0), newWidth * newHeight);
-
-        for (int i = 0; i < features.size(0); i++) {
-            INDArray image = features.getRow(i).reshape(28, 28);
-            BufferedImage bufferedImage = new BufferedImage(28, 28, BufferedImage.TYPE_BYTE_GRAY);
-            for (int y = 0; y < 28; y++) {
-                for (int x = 0; x < 28; x++) {
-                    int pixelValue = (int) (image.getDouble(y, x) * 255);
-                    bufferedImage.setRGB(x, y, (pixelValue << 16) | (pixelValue << 8) | pixelValue);
-                }
-            }
-
-            BufferedImage resizedImage = resizeImage(bufferedImage, newWidth, newHeight);
-            for (int y = 0; y < newHeight; y++) {
-                for (int x = 0; x < newWidth; x++) {
-                    int rgb = resizedImage.getRGB(x, y);
-                    int gray = (rgb & 0xFF);
-                    resizedFeatures.putScalar(i, y * newWidth + x, gray / 255.0);
-                }
-            }
-        }
-
-        return new DataSet(resizedFeatures, labels);
-    }
 }

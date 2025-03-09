@@ -30,25 +30,17 @@ public class SimpleNeuralNetwork {
         int numClasses = 10;
         int numEpochs = 500;
 
-        // Загрузка данных MNIST
-        DataSetIterator mnistTrainData = new MnistDataSetIterator(batchSize, true, 12345);
-        DataSetIterator mnistTestData = new MnistDataSetIterator(batchSize, false, 12345);
+        DataSetIterator trainData = new MnistDataSetIterator(batchSize, true, 12345);
+        DataSetIterator testData = new MnistDataSetIterator(batchSize, false, 12345);
 
-        // Преобразование данных в 8x8
-        List<org.nd4j.linalg.dataset.DataSet> trainDataList = resizeData(mnistTrainData, 8, 8);
-        List<org.nd4j.linalg.dataset.DataSet> testDataList = resizeData(mnistTestData, 8, 8);
 
-        DataSetIterator trainData = new ListDataSetIterator<>(trainDataList);
-        DataSetIterator testData = new ListDataSetIterator<>(testDataList);
-
-        // Конфигурация нейронной сети
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(12345)
                 .weightInit(WeightInit.XAVIER)
                 .updater(new Adam(0.001))
                 .list()
                 .layer(0, new DenseLayer.Builder()
-                        .nIn(64)
+                        .nIn(784)
                         .nOut(512)
                         .activation(Activation.RELU)
                         .dropOut(0.5)
@@ -65,35 +57,21 @@ public class SimpleNeuralNetwork {
                         .build())
                 .build();
 
-        // Создание и инициализация модели
         MultiLayerNetwork model = new MultiLayerNetwork(conf);
         model.init();
         model.setListeners(new ScoreIterationListener(100));
 
-        // Обучение модели
         for (int i = 0; i < numEpochs; i++) {
             System.out.println("Эпоха " + (i + 1) + " из " + numEpochs);
             model.fit(trainData);
         }
 
-        // Сохранение модели в файл
-        File modelFile = new File("model_8x8.zip");
+        File modelFile = new File("model_28x28.zip");
         ModelSerializer.writeModel(model, modelFile, true);
         System.out.println("Модель сохранена в файл: " + modelFile.getAbsolutePath());
 
-        // Оценка модели на тестовых данных
         System.out.println("Оценка модели на тестовых данных...");
         var eval = model.evaluate(testData);
         System.out.println(eval.stats());
-    }
-
-    private static List<org.nd4j.linalg.dataset.DataSet> resizeData(DataSetIterator iterator, int newWidth, int newHeight) {
-        List<org.nd4j.linalg.dataset.DataSet> resizedData = new ArrayList<>();
-        while (iterator.hasNext()) {
-            org.nd4j.linalg.dataset.DataSet dataSet = iterator.next();
-            org.nd4j.linalg.dataset.DataSet resizedDataSet = ModelUtils.resizeDataSet(dataSet, newWidth, newHeight);
-            resizedData.add(resizedDataSet);
-        }
-        return resizedData;
     }
 }

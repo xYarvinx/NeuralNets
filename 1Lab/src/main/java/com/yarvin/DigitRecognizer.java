@@ -29,7 +29,7 @@ public class DigitRecognizer extends JFrame {
         setLocationRelativeTo(null);
 
         try {
-            model = ModelSerializer.restoreMultiLayerNetwork(new File("model_8x8.zip"));
+            model = ModelSerializer.restoreMultiLayerNetwork(new File("model_28x28.zip"));
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ошибка загрузки модели!", "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -73,9 +73,9 @@ public class DigitRecognizer extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
-                    BufferedImage resizedImage = ModelUtils.resizeImage(image, 8, 8);
+                    BufferedImage resizedImage = ModelUtils.resizeImage(image, 28, 28);
                     double[] data = ModelUtils.imageToArray(resizedImage);
-                    INDArray input = Nd4j.create(data).reshape(1, 64);
+                    INDArray input = Nd4j.create(data).reshape(1, 784);
                     INDArray output = model.output(input);
                     int predictedDigit = Nd4j.argMax(output, 1).getInt(0);
                     predictionLabel.setText("Распознанная цифра: " + predictedDigit);
