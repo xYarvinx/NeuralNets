@@ -1,10 +1,13 @@
 package com.yarvin;
 
+import com.yarvin.neuralNetwork.SimpleNeuralNetwork;
 import com.yarvin.util.ModelUtils;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +24,7 @@ public class DigitRecognizer extends JFrame {
     private BufferedImage image;
     private JLabel predictionLabel;
     private MultiLayerNetwork model;
+    private static Logger logger = LoggerFactory.getLogger(DigitRecognizer.class);
 
     public DigitRecognizer() {
         setTitle("Рисуйте цифру");
@@ -79,6 +83,7 @@ public class DigitRecognizer extends JFrame {
                     INDArray output = model.output(input);
                     int predictedDigit = Nd4j.argMax(output, 1).getInt(0);
                     predictionLabel.setText("Распознанная цифра: " + predictedDigit);
+                    logger.info("Распознанная цифра: " + predictedDigit);
                 }
             }
         });
@@ -93,6 +98,7 @@ public class DigitRecognizer extends JFrame {
                 g2d.fillRect(0, 0, 560, 560);
                 drawPanel.repaint();
                 predictionLabel.setText("Распознанная цифра: ");
+                logger.info("Очищено");
             }
         });
 

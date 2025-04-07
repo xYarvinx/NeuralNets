@@ -7,6 +7,10 @@
     <groupId>com.yarvin</groupId>
     <artifactId>NeuralNets</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>2Lab</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

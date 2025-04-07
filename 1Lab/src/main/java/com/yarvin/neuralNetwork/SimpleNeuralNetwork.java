@@ -62,16 +62,16 @@ public class SimpleNeuralNetwork {
         model.setListeners(new ScoreIterationListener(100));
 
         for (int i = 0; i < numEpochs; i++) {
-            System.out.println("Эпоха " + (i + 1) + " из " + numEpochs);
+            logger.info("Эпоха " + (i + 1) + " из " + numEpochs);
             model.fit(trainData);
         }
 
         File modelFile = new File("model_28x28_2.zip");
         ModelSerializer.writeModel(model, modelFile, true);
-        System.out.println("Модель сохранена в файл: " + modelFile.getAbsolutePath());
+        logger.info("Модель сохранена в файл: " + modelFile.getAbsolutePath());
 
-        System.out.println("Оценка модели на тестовых данных...");
+        logger.info("Оценка модели на тестовых данных...");
         var eval = model.evaluate(testData);
-        System.out.println(eval.stats());
+        logger.info(eval.stats());
     }
 }
