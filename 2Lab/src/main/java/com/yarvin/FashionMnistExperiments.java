@@ -46,17 +46,11 @@ public class FashionMnistExperiments {
 
     private static DataSetIterator getTrainIterator() throws Exception {
         DataSetIterator trainIter = new MnistDataSetIterator(batchSize, true, seed);
-        DataNormalization scaler = new NormalizerMinMaxScaler(0, 1);
-        scaler.fit(trainIter);
-        trainIter.setPreProcessor(scaler);
         return trainIter;
     }
 
     private static DataSetIterator getTestIterator() throws Exception {
         DataSetIterator testIter = new MnistDataSetIterator(batchSize, false, seed);
-        DataNormalization scaler = new NormalizerMinMaxScaler(0, 1);
-        scaler.fit(testIter);
-        testIter.setPreProcessor(scaler);
         return testIter;
     }
 
