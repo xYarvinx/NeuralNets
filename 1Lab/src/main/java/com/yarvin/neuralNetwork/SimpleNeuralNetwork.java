@@ -1,7 +1,5 @@
 package com.yarvin.neuralNetwork;
 
-import com.yarvin.util.ModelUtils;
-import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
 import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -19,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SimpleNeuralNetwork {
     private static final Logger logger = LoggerFactory.getLogger(SimpleNeuralNetwork.class);
